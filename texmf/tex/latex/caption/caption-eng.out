@@ -1,0 +1,59 @@
+\BOOKMARK [1][-]{toc1.1}{Contents}{}
+\BOOKMARK [1][-]{section.1}{1 Using this package}{}
+\BOOKMARK [1][-]{section.2}{2 Options}{}
+\BOOKMARK [2][-]{subsection.2.1}{2.1 Formatting}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{2.2 Justification}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{2.3 Fonts}{section.2}
+\BOOKMARK [2][-]{subsection.2.4}{2.4 Margins and further paragraph options}{section.2}
+\BOOKMARK [2][-]{subsection.2.5}{2.5 Styles}{section.2}
+\BOOKMARK [2][-]{subsection.2.6}{2.6 Skips}{section.2}
+\BOOKMARK [2][-]{subsection.2.7}{2.7 Lists}{section.2}
+\BOOKMARK [2][-]{subsection.2.8}{2.8 Names}{section.2}
+\BOOKMARK [2][-]{subsection.2.9}{2.9 Types}{section.2}
+\BOOKMARK [1][-]{section.3}{3 Commands}{}
+\BOOKMARK [2][-]{subsection.3.1}{3.1 Typesetting captions}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{3.2 Setting options}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{3.3 Continued floats}{section.3}
+\BOOKMARK [1][-]{section.4}{4 Own enhancements}{}
+\BOOKMARK [2][-]{subsection.4.1}{4.1 Further examples}{section.4}
+\BOOKMARK [1][-]{section.5}{5 Document classes \046 Babel support}{}
+\BOOKMARK [2][-]{subsection.5.1}{5.1 Standard LaTeX: article, report, and book}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{5.2 AMS: amsart, amsproc, and amsbook}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{5.3 beamer}{section.5}
+\BOOKMARK [2][-]{subsection.5.4}{5.4 KOMA-Script: scrartcl, scrreprt, and scrbook}{section.5}
+\BOOKMARK [2][-]{subsection.5.5}{5.5 NTG: artikel, rapport, and boek}{section.5}
+\BOOKMARK [2][-]{subsection.5.6}{5.6 SMF: smfart and smfbook}{section.5}
+\BOOKMARK [2][-]{subsection.5.7}{5.7 thesis}{section.5}
+\BOOKMARK [2][-]{subsection.5.8}{5.8 frenchb babel option}{section.5}
+\BOOKMARK [2][-]{subsection.5.9}{5.9 frenchle and frenchpro packages}{section.5}
+\BOOKMARK [1][-]{section.6}{6 Package support}{}
+\BOOKMARK [2][-]{subsection.6.1}{6.1 algorithms}{section.6}
+\BOOKMARK [2][-]{subsection.6.2}{6.2 float}{section.6}
+\BOOKMARK [2][-]{subsection.6.3}{6.3 floatflt}{section.6}
+\BOOKMARK [2][-]{subsection.6.4}{6.4 fltpage}{section.6}
+\BOOKMARK [2][-]{subsection.6.5}{6.5 hyperref}{section.6}
+\BOOKMARK [2][-]{subsection.6.6}{6.6 hypcap}{section.6}
+\BOOKMARK [2][-]{subsection.6.7}{6.7 listings}{section.6}
+\BOOKMARK [2][-]{subsection.6.8}{6.8 longtable}{section.6}
+\BOOKMARK [2][-]{subsection.6.9}{6.9 picinpar}{section.6}
+\BOOKMARK [2][-]{subsection.6.10}{6.10 picins}{section.6}
+\BOOKMARK [2][-]{subsection.6.11}{6.11 rotating}{section.6}
+\BOOKMARK [2][-]{subsection.6.12}{6.12 setspace}{section.6}
+\BOOKMARK [2][-]{subsection.6.13}{6.13 sidecap}{section.6}
+\BOOKMARK [2][-]{subsection.6.14}{6.14 subfigure}{section.6}
+\BOOKMARK [2][-]{subsection.6.15}{6.15 supertabular and xtab}{section.6}
+\BOOKMARK [2][-]{subsection.6.16}{6.16 threeparttable}{section.6}
+\BOOKMARK [2][-]{subsection.6.17}{6.17 wrapfig}{section.6}
+\BOOKMARK [1][-]{section.7}{7 Further reading}{}
+\BOOKMARK [1][-]{section.8}{8 Thanks}{}
+\BOOKMARK [1][-]{appendix.A}{A Alphabetical Reference}{}
+\BOOKMARK [2][-]{subsection.A.1}{A.1 Options}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.2}{A.2 Commands}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.3}{A.3 Warnings}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.4}{A.4 Errors}{appendix.A}
+\BOOKMARK [1][-]{appendix.B}{B Version history}{}
+\BOOKMARK [1][-]{appendix.C}{C Compatibility to older versions}{}
+\BOOKMARK [2][-]{subsection.C.1}{C.1 caption v1.x}{appendix.C}
+\BOOKMARK [2][-]{subsection.C.2}{C.2 caption2 v2.x}{appendix.C}
+\BOOKMARK [2][-]{subsection.C.3}{C.3 caption v3.0}{appendix.C}
+\BOOKMARK [1][-]{bib2.1}{References}{}

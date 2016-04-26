@@ -1,0 +1,47 @@
+#!/bin/sh
+
+if [ -z "$XRCLOADED" ]; then
+
+# -----------------------------------------------------------------------------
+# change keyboard settings
+# -----------------------------------------------------------------------------
+
+    setxkbmap -layout us                      # no dead keys
+    case $(hostname) in
+        silveru)
+            setxkbmap -option altwin:ctrl_win # right alt is control
+            ;;
+        *)
+            setxkbmap -option ctrl:swapcaps   # swap ctrl and caps
+            ;;
+    esac
+
+    # -- this can also be done by '.Xkbmap' file:--
+    # XKB="$HOME/.Xkbmap"
+    # if [ ! -f "$XKB" ]; then
+    #     setxkbmap -layout us        # no dead keys
+    #     setxkbmap -option altwin:ctrl_win 2>/dev/null
+    #     [ "$HOSTNAME" != "silveru" ] && \
+    #         setxkbmap -option ctrl:swapcaps 2>/dev/null # swap ctrl and caps
+    #
+    #     # permanently store settings
+    #     echo "-layout us" >> $XKB
+    #     echo "-option altwin:ctrl_win" >> $XKB
+    #     [ "$HOSTNAME" != "silveru" ] && \
+    #         echo "-option ctrl:swapcaps" >> $XKB
+    # fi
+
+    # -- alternative: use xmodmap (determine key code with 'xev'): --
+    #    RIGHT_ALT="Alt_R"
+    #    if [ "$(xmodmap 2>/dev/null | grep "$RIGHT_ALT" | grep "control" )" == "" ]; then
+    #        MODIFIER=$(xmodmap 2>/dev/null | grep "Alt_R" | grep -oE "^[^\ ]*")
+    #        if [ "$MODIFIER" != "" ]; then
+    #            xmodmap -e "remove $MODIFIER = $RIGHT_ALT" 2>/dev/null
+    #        fi
+    #        xmodmap -e "add control = $RIGHT_ALT" 2>/dev/null
+    #    fi
+
+fi
+
+export XRCLOADED="YES"
+

@@ -1,0 +1,155 @@
+#!/bin/bash
+
+# -----------------------------------------------------------------------------
+# ANSI color codes
+# -----------------------------------------------------------------------------
+
+RS="\033[0m"    # reset
+HC="\033[1m"    # hicolor
+UL="\033[4m"    # underline
+INV="\033[7m"   # inverse background and foreground
+FBLK="\033[30m" # foreground black
+FRED="\033[31m" # foreground red
+FGRN="\033[32m" # foreground green
+FYEL="\033[33m" # foreground yellow
+FBLE="\033[34m" # foreground blue
+FMAG="\033[35m" # foreground magenta
+FCYN="\033[36m" # foreground cyan
+FWHT="\033[37m" # foreground white
+BBLK="\033[40m" # background black
+BRED="\033[41m" # background red
+BGRN="\033[42m" # background green
+BYEL="\033[43m" # background yellow
+BBLE="\033[44m" # background blue
+BMAG="\033[45m" # background magenta
+BCYN="\033[46m" # background cyan
+BWHT="\033[47m" # background white
+
+function EXT_COLOR () { echo -ne "\033[38;5;$1m"; }
+
+ORANGE=$(EXT_COLOR 172)
+
+# -----------------------------------------------------------------------------
+# shell prompt appearance functions
+# -----------------------------------------------------------------------------
+
+function git_info(){
+    if [ "$(git rev-parse 2>&1)" == "" ]; then
+        GITDIR=$(git rev-parse --show-toplevel  2>&1 | sed "s:$HOME:home:")
+        #BRANCH=$(git rev-parse --abbrev-ref HEAD 2>&1)
+        BRANCH=$(git symbolic-ref HEAD 2>/dev/null)
+        BRANCH=${BRANCH##refs/heads/}
+        BRANCH=${BRANCH:-detached}
+        echo -e "$(basename $GITDIR) ${FGRN}${BRANCH}${RS}:"
+    fi
+}
+
+function last_two_dirs {
+    DIRS=$(echo "$(pwd)" \
+        | sed "s:^${HOME}:\~:" \
+        | rev \
+        | awk -F/ '{printf "%s",$1; if($2 != "") printf "/%s",$2;}' \
+        | rev )
+
+    if [ "${DIRS:0:1}" != '~' ]; then
+        if [ -n "$DIRS" ]; then
+            echo -n "../"
+        else
+            echo -n "/"
+        fi
+    fi
+    echo $DIRS
+}
+
+case $HOSTNAME in
+    silver          ) PROMPT_COLOR=$FGRN;;
+    fs              ) PROMPT_COLOR=$FMAG;;
+    node[0-9][0-9]  ) PROMPT_COLOR=$FBLE;;
+    lilo*           ) PROMPT_COLOR=$FYEL;;
+    *               ) PROMPT_COLOR=$ORANGE;;
+esac
+
+# -----------------------------------------------------------------------------
+# prompt appearance
+    # -----------------------------------------------------------------------------
+
+PROMPT_PRIMARY=$(echo -e "\xe2\x97\x8f")
+PROMPT_SECONDARY=$(echo -en "\xe2\x97\x8b")
+OS=$(if [ "$(uname -m)" == "x86_64" ]; then echo "64"; else echo "32"; fi)
+
+function __prompt_command (){
+    RETURN_VALUE=$?;
+    history -a;
+    echo -ne "\033]0;\007";
+    RETURN_COLOR="$([ $RETURN_VALUE -eq 0 ] && echo -en "$PROMPT_COLOR" || echo -en "$FRED")";
+    undirect;
+}
+
+export PROMPT_COMMAND=__prompt_command
+
+# keep in mind color codes without surrounding [ and ] will screw up history lookup
+if [ "$OS" == "32" ]; then
+    PS1='\n$(echo -en "\[${PROMPT_COLOR}\]$HOSTNAME\[${RS}\] \[${FRED}\]32-bit\[${RS}\]:$(git_info)$(last_two_dirs)\n\[${RETURN_COLOR}\] ${PROMPT_PRIMARY} \[${RS}\]";)'
+else
+    PS1='\n$(echo -en "\[${PROMPT_COLOR}\]$HOSTNAME\[${RS}\]:$(git_info)$(last_two_dirs)\n\[${RETURN_COLOR}\] ${PROMPT_PRIMARY} \[${RS}\]";)'
+fi
+PS2=' $(echo -en "\[${RETURN_COLOR}\]${PROMPT_SECONDARY}\[${RS}\]") '
+
+# -----------------------------------------------------------------------------
+# colored error output
+# -----------------------------------------------------------------------------
+
+#export LD_PRELOAD="$HOME/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+
+[ -n "$STDERR_COLOR" -a  "$HOSTNAME" != "silver" ] && export COLORPROMPT=1 || export COLORPROMPT=0;
+
+function colorenable(){ [ -n "$STDERR_COLOR" ] && export COLORPROMPT=1 || echo "STDERR_COLOR not set" 1>&2;  }
+function colordisable(){ export COLORPROMPT=0; }
+
+export STDERR_COLOR_EXCEPTIONS=":python:python3:svn:rm:mv:cp:sudo:su:bash:wget:scp:vim:tmux:rudin:gnuplot:" # ':' separated list
+
+# 'undirect' function is located as LAST function in PROMPT_COMMAND
+function undirect(){
+    [ -n "$STDERR_COLOR" ] && trap -- INT && exec 2>&9 ;
+}
+
+function redirect(){
+    if [ $COLORPROMPT ]; then
+        local IFS=":"; local cmd;
+        local PRG="${BASH_COMMAND%% *}"
+        PRG=$(basename "$PRG")
+        [[ "$STDERR_COLOR_EXCEPTIONS" =~ ":$PRG:" ]] && return 1
+
+        function _interupted() { exec 2>&9; }
+        trap ctrl_c INT
+
+        [[ ":make:gcc:g++:" =~ ":$PRG:" ]] && exec 2>&7 || exec 2>&8
+    else
+        exec 2>&9;
+    fi
+}
+
+exec 9>&2           # store initial output of pipe 2
+exec 8> >(
+    while IFS='' read -r line || [ -n "$line" ]; do
+        echo -e "${STDERR_COLOR}${line}${RS}"
+    done
+)
+exec 7> >(
+    sed $'s,.*,\e[31m&\e[m,'
+    set -e -o pipefail;
+    while IFS='' read -r line || [ -n "$line" ]; do
+        if [[ $line == *:[\ ]error:* ]] || [[ $line == *:[\ ]undefined* ]] || [[ $line == *:[\ ]fatal\ error:* ]] || [[ $line == *:[\ ]multiple[\ ]definition* ]]; then
+            echo -e "\033[1m${STDERR_COLOR}${line}${RS}"
+        elif [[ $line == *:[\ ]warning:* ]]; then
+            echo -e "$(EXT_COLOR 202)${line}${RS}"
+        else
+            echo -e "\033[1m$(EXT_COLOR 8)${line}${RS}"
+        fi
+    done
+)
+
+if [[ $HOSTNAME != silver ]]; then
+   trap "redirect;" DEBUG
+fi
+

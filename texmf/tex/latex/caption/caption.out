@@ -1,0 +1,47 @@
+\BOOKMARK [1][-]{toc1.1}{Contents}{}
+\BOOKMARK [1][-]{section.1}{1 Identification}{}
+\BOOKMARK [1][-]{section.2}{2 Loading the kernel}{}
+\BOOKMARK [1][-]{section.3}{3 Check against incompatible document classes}{}
+\BOOKMARK [1][-]{section.4}{4 Check against incompatible packages}{}
+\BOOKMARK [1][-]{section.5}{5 Declaration of options}{}
+\BOOKMARK [2][-]{subsection.5.1}{5.1 Options for figure and table}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{5.2 Miscellaneous options}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{5.3 caption v1.x compatibility options}{section.5}
+\BOOKMARK [2][-]{subsection.5.4}{5.4 caption2 v2.x compatibility options}{section.5}
+\BOOKMARK [2][-]{subsection.5.5}{5.5 Obsolete caption v3.0 options}{section.5}
+\BOOKMARK [2][-]{subsection.5.6}{5.6 fltpage package support options}{section.5}
+\BOOKMARK [2][-]{subsection.5.7}{5.7 hyperref package support options}{section.5}
+\BOOKMARK [1][-]{section.6}{6 AMS \046 SMF document classes support}{}
+\BOOKMARK [1][-]{section.7}{7 KOMA-Script document classes support}{}
+\BOOKMARK [1][-]{section.8}{8 Processing of options}{}
+\BOOKMARK [1][-]{section.9}{9 \134caption, \134@caption, and \134@makecaption}{}
+\BOOKMARK [1][-]{section.10}{10 \134captionof}{}
+\BOOKMARK [1][-]{section.11}{11 \134captionlistentry}{}
+\BOOKMARK [1][-]{section.12}{12 \134captionbox}{}
+\BOOKMARK [1][-]{section.13}{13 \134ContinuedFloat}{}
+\BOOKMARK [1][-]{section.14}{14 Internal helpers}{}
+\BOOKMARK [1][-]{section.15}{15 Support for sub-captions}{}
+\BOOKMARK [1][-]{section.16}{16 Document class \046 Babel package support}{}
+\BOOKMARK [2][-]{subsection.16.1}{16.1 The AMS \046 SMF classes}{section.16}
+\BOOKMARK [2][-]{subsection.16.2}{16.2 The beamer class}{section.16}
+\BOOKMARK [2][-]{subsection.16.3}{16.3 The KOMA-Script classes}{section.16}
+\BOOKMARK [2][-]{subsection.16.4}{16.4 The frenchb Babel option}{section.16}
+\BOOKMARK [2][-]{subsection.16.5}{16.5 The frenchle/pro package}{section.16}
+\BOOKMARK [2][-]{subsection.16.6}{16.6 The hungarian and magyar Babel option}{section.16}
+\BOOKMARK [1][-]{section.17}{17 Package support}{}
+\BOOKMARK [2][-]{subsection.17.1}{17.1 The float package}{section.17}
+\BOOKMARK [2][-]{subsection.17.2}{17.2 The floatflt package}{section.17}
+\BOOKMARK [2][-]{subsection.17.3}{17.3 The fltpage package}{section.17}
+\BOOKMARK [2][-]{subsection.17.4}{17.4 The hyperref package}{section.17}
+\BOOKMARK [2][-]{subsection.17.5}{17.5 The hypcap package}{section.17}
+\BOOKMARK [2][-]{subsection.17.6}{17.6 The listings package}{section.17}
+\BOOKMARK [2][-]{subsection.17.7}{17.7 The longtable package}{section.17}
+\BOOKMARK [2][-]{subsection.17.8}{17.8 The picinpar package}{section.17}
+\BOOKMARK [2][-]{subsection.17.9}{17.9 The picins package}{section.17}
+\BOOKMARK [2][-]{subsection.17.10}{17.10 The rotating package}{section.17}
+\BOOKMARK [2][-]{subsection.17.11}{17.11 The sidecap package}{section.17}
+\BOOKMARK [2][-]{subsection.17.12}{17.12 The subfigure package}{section.17}
+\BOOKMARK [2][-]{subsection.17.13}{17.13 The supertabular and xtab packages}{section.17}
+\BOOKMARK [2][-]{subsection.17.14}{17.14 The threeparttable package}{section.17}
+\BOOKMARK [2][-]{subsection.17.15}{17.15 The wrapfig package}{section.17}
+\BOOKMARK [1][-]{bib2.1}{References}{}
