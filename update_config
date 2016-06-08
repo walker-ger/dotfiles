@@ -1,9 +1,0 @@
-#!/bin/bash
-
-DIR=$( cd "$( dirname "$0" )" && pwd )
-
-FILES=$(git ls-tree -r HEAD --name-only)
-for f in $FILES; do
-    rsync -ah "${HOME}/$f" "$f"
-done
-
