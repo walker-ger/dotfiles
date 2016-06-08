@@ -155,3 +155,6 @@
     excludesfile = ~/.gitignoreglobal
 [merge "ours"]
 	driver = true
+[pager]
+	show = vim -R -
+	color = false

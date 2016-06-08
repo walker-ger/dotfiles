@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# -----------------------------------------------------------------------------
+# Aliases
+# -----------------------------------------------------------------------------
+
+alias cp="rsync -ahv"
+alias cp%="rsync -ahv --progress"
+alias h='history'
+alias lt='/bin/ls --color=auto -lht'
+alias ltf='lt --color=always -lht | grep --color=never "^-"'
+alias ltd='lt --color=always -lht | grep --color=never "^d"'
+alias grep='grep --line-number --color=auto'
+alias lpr='lpr -o sides=two-sided-long-edge -o number-up=2'
+alias cugdb='cgdb -d cuda-gdb'
+alias nettop='sudo nethogs'
+alias tmux='tmux -2 -u'                        # force 256 colors AND UTF-8
+alias sshnokey='ssh -Y -o PreferredAuthentications=password -o PubkeyAuthentication=no'
+alias ..='popd &>/dev/null'
+alias vim='vim -O'
+alias unspoof='spoof x'
+alias cpu='ps -e -o pcpu:6,psr:6,cpu:6,nice:6,cputime:12,user:8,args --sort pcpu | sed "/^   0.0 /d"'
+alias vgdb='valgrind --vgdb=yes --vgdb-error=0 --leak-check=full --show-reachable=yes --track-origins=yes --num-callers=20 --track-fds=yes'
+alias gdb='gdb -q'
+alias ls='ls --color=auto -v -h --group-directories-first'
+alias evince='env -i DISPLAY=$DISPLAY evince'
+alias lock='lxlock' # sudo apt-get install lxsession
+alias callgrind='valgrind --tool=callgrind'
+alias profgrind='valgrind --tool=kcachegrind'
+alias blank='sleep 1; xset dpms force off'
+alias swapalt='setxkbmap -option; setxkbmap -layout us; setxkbmap -option altwin:ctrl_win;'
+alias swapcaps='setxkbmap -option; setxkbmap -layout us; setxkbmap -option ctrl:swapcaps'
+alias cmake="cmake -D MAKE_C_COMPILER=$GCCL/bin/gcc -D CMAKE_CXX_COMPILER=$GCCL/bin/g++ -D CMAKE_INSTALL_PREFIX=$PRG"
+alias cc='clang'
+alias k='fc -s'
+
+[ -n "$(which htop 2>/dev/null)" ] && alias top='(TERM=xterm-256color; htop)'
+[ "$XDG_CURRENT_DESKTOP" == "GNOME" ] && alias open='gnome-open 2>/dev/null';
+

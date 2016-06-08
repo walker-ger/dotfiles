@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# -----------------------------------------------------------------------------
+# change keyboard settings
+# -----------------------------------------------------------------------------
+
+# if not an ssh connection
+if  [ -z "$SSH_TTY" ]           && \
+    [ -z "$SSH_CONNECTION" ]    && \
+    [ -z "$SSH_CLIENT" ]; then
+
+    case $(hostname) in
+        freestyle)
+            # right alt is control (freestyle2 keyboard)
+            MAPPED=$(setxkbmap -query | grep -o 'ctrl_win' 2>&1)
+            if [ $? ] && [ -z "$MAPPED" ]; then
+                setxkbmap -layout us
+                setxkbmap -option altwin:ctrl_win
+            fi
+            ;;
+        *)
+            # swap ctrl and caps
+            MAPPED=$(setxkbmap -query | grep -o 'swapcaps' 2>&1)
+            if [ $? ] && [ -z "$MAPPED" ]; then
+                setxkbmap -layout us
+                setxkbmap -option ctrl:swapcaps
+            fi
+            ;;
+    esac
+
+    # -------------------------------------------------------------------------
+    # Method 2
+    # -------------------------------------------------------------------------
+
+    # -- this can also be done by '.Xkbmap' file:--
+    # XKB="$HOME/.Xkbmap"
+    # if [ ! -f "$XKB" ]; then
+    #     setxkbmap -layout us        # no dead keys
+    #     setxkbmap -option altwin:ctrl_win 2>/dev/null
+    #     [ "$HOSTNAME" != "silveru" ] && \
+    #         setxkbmap -option ctrl:swapcaps 2>/dev/null # swap ctrl and caps
+    #
+    #     # permanently store settings
+    #     echo "-layout us" >> $XKB
+    #     echo "-option altwin:ctrl_win" >> $XKB
+    #     [ "$HOSTNAME" != "silveru" ] && \
+    #         echo "-option ctrl:swapcaps" >> $XKB
+    # fi
+
+
+    # -------------------------------------------------------------------------
+    # Method 3
+    # -------------------------------------------------------------------------
+
+    # -- alternative: use xmodmap (determine key code with 'xev'): --
+    #    RIGHT_ALT="Alt_R"
+    #    if [ "$(xmodmap 2>/dev/null | grep "$RIGHT_ALT" | grep "control" )" == "" ]; then
+    #        MODIFIER=$(xmodmap 2>/dev/null | grep "Alt_R" | grep -oE "^[^\ ]*")
+    #        if [ "$MODIFIER" != "" ]; then
+    #            xmodmap -e "remove $MODIFIER = $RIGHT_ALT" 2>/dev/null
+    #        fi
+    #        xmodmap -e "add control = $RIGHT_ALT" 2>/dev/null
+    #    fi
+
+fi
+

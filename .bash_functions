@@ -4,6 +4,15 @@
 # bash functions
 # -----------------------------------------------------------------------------
 
+# limit exec time
+function time-limit(){
+    if [ $# -ge 2 ]; then
+        perl -e 'alarm shift @ARGV; exec @ARGV' $1 ${@:2}
+    else
+        echo "Usage: time-limit <seconds> <command>" 1>&2
+    fi
+}
+
 # wake-up pcs
 function wake-silveru(){
     if [[ $HOSTNAME == lilo* ]]; then
