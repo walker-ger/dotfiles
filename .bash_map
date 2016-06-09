@@ -7,26 +7,29 @@
 # if not an ssh connection
 if  [ -z "$SSH_TTY" ]           && \
     [ -z "$SSH_CONNECTION" ]    && \
-    [ -z "$SSH_CLIENT" ]; then
+    [ -z "$SSH_CLIENT" ]        && \
+    [ -n "$DISPLAY" ]; then
 
-    case $(hostname) in
-        freestyle)
-            # right alt is control (freestyle2 keyboard)
-            MAPPED=$(setxkbmap -query | grep -o 'ctrl_win' 2>&1)
-            if [ $? ] && [ -z "$MAPPED" ]; then
-                setxkbmap -layout us
+    MAP=$(setxkbmap -query)
+
+    # set layout
+    if [ "$(echo $MAP | grep "layout" | awk '{print $2}')" != "us" ]; then
+        setxkbmap -layout us
+    fi
+
+    # map keys
+    if [ -z "$(echo $MAP | grep "options" | awk '{print $2}')" ]; then
+        case $(hostname) in
+            dalVM)
+                # right alt is control (freestyle2 keyboard)
                 setxkbmap -option altwin:ctrl_win
-            fi
-            ;;
-        *)
-            # swap ctrl and caps
-            MAPPED=$(setxkbmap -query | grep -o 'swapcaps' 2>&1)
-            if [ $? ] && [ -z "$MAPPED" ]; then
-                setxkbmap -layout us
+                ;;
+            *)
+                # swap ctrl and caps
                 setxkbmap -option ctrl:swapcaps
-            fi
-            ;;
-    esac
+                ;;
+        esac
+    fi
 
     # -------------------------------------------------------------------------
     # Method 2

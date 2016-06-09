@@ -27,6 +27,7 @@ case "$-" in
         if  [ -z "$SSH_TTY" ]           && \
             [ -z "$SSH_CONNECTION" ]    && \
             [ -z "$SSH_CLIENT" ]        && \
+            [ -n "$DISPLAY" ]           && \
             [ -z "$TMUX"  ]; then
             tmux
         fi

@@ -105,7 +105,7 @@ export HISTTIMEFORMAT="[%Y-%m-%d %T] "  # timestamp history commands
 export HISTCONTROL="ignoredups"         # dont record duplicate commands
 export HISTIGNORE="&:ls:cd:[bf]g:exit"  # dont record simple commands like ls
 export CORES=$(grep -c ^processor /proc/cpuinfo)
-export TEXMFHOME="$(HOME)/.texmf"
+export TEXMFHOME="${HOME}/.texmf"
 if [[ -n $CORES ]] && [ $CORES -gt 1 ]; then
     export MAKEFLAGS="-j$CORES"             # gnu make run parallel
 fi
