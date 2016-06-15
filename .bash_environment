@@ -63,55 +63,65 @@ function add-bin-path() {
     fi
 }
 
-# -----------------------------------------------------------------------------
-# update PATH, INCLUDE and LIBRARY paths
-# -----------------------------------------------------------------------------
 
-CUDA="/usr/local/cuda"
-GCCL="$HOME/gcc"
-PRG="$HOME/usr"
-PYTHON="$PRG/local/python"
+if [ -z "$BASH_CUSTOM_ENVIRONMENT" ]; then
 
-add-include-path $GCCL/include $PRG/include $PRG/include/ncurses $CUDA/include /usr/include
-add-library-path $GCCL/lib $GCCL/lib64 $PRG/lib $PRG/lib64 $CUDA/lib $CUDA/lib64 /lib64 /usr/lib
-add-bin-path     $GCCL/bin $PRG/bin:$CUDA/bin $PRG/bin/texbin $HOME/texlive/bin/i386-linux $PYTHON/bin
+    # -----------------------------------------------------------------------------
+    # update PATH, INCLUDE and LIBRARY paths and environment
+    # -----------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# Update program environment
-# -----------------------------------------------------------------------------
+    CUDA="/usr/local/cuda"
+    GCCL="$HOME/gcc"
+    PRG="$HOME/usr"
+    PYTHON="$PRG/local/python"
 
-# setup git user
-printf "[user]\n    name = $USER@$HOSTNAME\n    email = $USER@cs.ru.nl\n" > $HOME/.gituser
+    add-include-path $GCCL/include $PRG/include $PRG/include/ncurses $CUDA/include /usr/include
+    add-library-path $GCCL/lib $GCCL/lib64 $PRG/lib $PRG/lib64 $CUDA/lib $CUDA/lib64 /lib64 /usr/lib
+    add-bin-path     $GCCL/bin $PRG/bin:$CUDA/bin $PRG/bin/texbin $HOME/texlive/bin/i386-linux $PYTHON/bin
 
-#export CDPATH=".:$HOME"                 # homedir available from everywhere
-export CVSROOT="$HOME/trunk/cvs"
-export CVSEDITOR="vim"
-mkdir -p "$CVSROOT/CVSROOT"
-export PYTHONPATH="$PRG/local/python/lib/python3.4/site-packages/"
-mkdir -p $PYTHONPATH
 
-export PKG_CONFIG_PATH="$PRG/lib/pkgconfig"
-export VALGRIND_LIB="$PRG/lib/valgrind"
-export EDITOR="vim"
-export VISUAL="vim"
-export XZ_OPT="-9"                      # best compression for tar.xz creation
-export LC_ALL="en_US.UTF-8"             # use UTF-8 character set
-export LANG="en_US.UTF-8"
-export LANGUAGE="en_US.UTF-8"
-export CLICOLOR=1                       # use colors (if possible)
-export PRINTER="$([ $HOSTNAME == "silveru" ] && echo "lacertian";)"
-export STDERR_COLOR="\033[31m"          # make stderr output red
-export HISTTIMEFORMAT="[%Y-%m-%d %T] "  # timestamp history commands
-export HISTCONTROL="ignoredups"         # dont record duplicate commands
-export HISTIGNORE="&:ls:cd:[bf]g:exit"  # dont record simple commands like ls
-export CORES=$(grep -c ^processor /proc/cpuinfo)
-export TEXMFHOME="${HOME}/.texmf"
-if [[ -n $CORES ]] && [ $CORES -gt 1 ]; then
-    export MAKEFLAGS="-j$CORES"             # gnu make run parallel
-fi
+    # -----------------------------------------------------------------------------
+    # Update program environment
+    # -----------------------------------------------------------------------------
 
-if [ -x /usr/bin/dircolors ]; then
-    test -r $HOME/.lsrc && eval "$(dircolors --sh "$HOME/.lsrc")"
+    # setup git user
+    printf "[user]\n    name = $USER@$HOSTNAME\n    email = $USER@cs.ru.nl\n" > $HOME/.gituser
+
+    #export CDPATH=".:$HOME"                 # homedir available from everywhere
+    export CVSROOT="$HOME/trunk/cvs"
+    export CVSEDITOR="vim"
+    mkdir -p "$CVSROOT/CVSROOT"
+    export PYTHONPATH="$PRG/local/python/lib/python3.4/site-packages/"
+    mkdir -p $PYTHONPATH
+
+    export PKG_CONFIG_PATH="$PRG/lib/pkgconfig"
+    export VALGRIND_LIB="$PRG/lib/valgrind"
+    export EDITOR="vim"
+    export VISUAL="vim"
+    export XZ_OPT="-9"                      # best compression for tar.xz creation
+    export LC_ALL="en_US.UTF-8"             # use UTF-8 character set
+    export LANG="en_US.UTF-8"
+    export LANGUAGE="en_US.UTF-8"
+    export CLICOLOR=1                       # use colors (if possible)
+    export PRINTER="$([ $HOSTNAME == "silveru" ] && echo "lacertian";)"
+    export STDERR_COLOR="\033[31m"          # make stderr output red
+    export HISTTIMEFORMAT="[%Y-%m-%d %T] "  # timestamp history commands
+    export HISTCONTROL="ignoredups"         # dont record duplicate commands
+    export HISTIGNORE="&:ls:cd:[bf]g:exit"  # dont record simple commands like ls
+    export CORES=$(grep -c ^processor /proc/cpuinfo)
+    export TEXMFHOME="${HOME}/.texmf"
+
+    if [[ -n $CORES ]] && [ $CORES -gt 1 ]; then
+        export MAKEFLAGS="-j$CORES"             # gnu make run parallel
+    fi
+
+    if [ -x /usr/bin/dircolors ]; then
+        test -r $HOME/.lsrc && eval "$(dircolors --sh "$HOME/.lsrc")"
+    fi
+
+    ulimit -c unlimited
+
+    export BASH_CUSTOM_ENVIRONMENT="set"
 fi
 
 if [ -n "$TMUX" ]; then
@@ -119,8 +129,4 @@ if [ -n "$TMUX" ]; then
 else
     export TERM='xterm-256color'
 fi
-
-ulimit -c unlimited
-
-export BASH_CUSTOM_ENVIRONMENT="set"
 

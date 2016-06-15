@@ -8,9 +8,7 @@ case "$-" in
 
         source $HOME/.bash_map
 
-        if [ -z "$BASH_CUSTOM_ENVIRONMENT" ]; then
-            source $HOME/.bash_environment
-        fi
+        source $HOME/.bash_environment
 
         source $HOME/.bash_alias
 
