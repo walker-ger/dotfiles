@@ -13,22 +13,18 @@ if  [ -z "$SSH_TTY" ]           && \
     MAP=$(setxkbmap -query)
 
     # set layout
-    if [ "$(echo $MAP | grep "layout" | awk '{print $2}')" != "us" ]; then
+    if [[ "$(echo "$MAP" | grep "layout" | awk '{print $2}')" != "us" ]]; then
         setxkbmap -layout us
     fi
 
     # map keys
-    if [ -z "$(echo $MAP | grep "options" | awk '{print $2}')" ]; then
-        case $(hostname) in
-            dalVM)
-                # right alt is control (freestyle2 keyboard)
-                setxkbmap -option altwin:ctrl_win
-                ;;
-            *)
-                # swap ctrl and caps
-                setxkbmap -option ctrl:swapcaps
-                ;;
-        esac
+    case $(hostname) in
+        dalVM)  XKBOPTION="altwin:ctrl_win";;    # right alt is control (freestyle2 keyboard)
+        *)      XKBOPTION="ctrl:swapcaps";;      # swap ctrl and caps
+    esac
+
+    if [[ "$(echo "$MAP" | grep "options" | awk '{print $2}')" != *"$XKBOPTION"* ]]; then
+        setxkbmap -option $XKBOPTION
     fi
 
     # -------------------------------------------------------------------------
