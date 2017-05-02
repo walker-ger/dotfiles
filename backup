@@ -7,9 +7,11 @@ mkdir -p ${BACKUPDIR}
 for DIR in $DIRS; do
     for FILE in $(find $DIR -xtype f); do
         TARGETFILE="${TARGET}/${FILE#*/}"
-        if [[ -L "$TARGETFILE" && -d "$TARGETFILE" ]] || [[ -d "$TARGETFILE" ]]; then
-            echo "Target '$TARGETFILE' is a directory"
-            exit 1
+        if [[ -L "$TARGETFILE" ]]; then
+            SYMLINK=$(readlink -f "$TARGETFILE")
+            if [[ "$SYMLINK" == *"$SCRIPTDIR"* ]]; then
+                continue
+            fi
         fi
 
         if [ -f "${TARGETFILE}" ]; then
