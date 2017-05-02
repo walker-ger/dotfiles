@@ -3,3 +3,4 @@
 DIR=$( cd "$( dirname "$0" )" && pwd )
 infocmp xterm-256color > $DIR/xterm-256color.ti
 infocmp screen-256color > $DIR/screen-256color.ti
+
