@@ -71,7 +71,7 @@ esac
 
 # -----------------------------------------------------------------------------
 # prompt appearance
-    # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 PROMPT_PRIMARY=$(echo -e "\xe2\x97\x8f")
 PROMPT_SECONDARY=$(echo -en "\xe2\x97\x8b")
@@ -82,7 +82,6 @@ function __prompt_command (){
     history -a;
     echo -ne "\033]0;\007";
     RETURN_COLOR="$([ $RETURN_VALUE -eq 0 ] && echo -en "$PROMPT_COLOR" || echo -en "$FRED")";
-    undirect;
 }
 
 export PROMPT_COMMAND=__prompt_command
@@ -94,62 +93,4 @@ else
     PS1='\n$(echo -en "\[${PROMPT_COLOR}\]$HOSTNAME\[${RS}\]:$(git_info)$(last_two_dirs)\n\[${RETURN_COLOR}\] ${PROMPT_PRIMARY} \[${RS}\]";)'
 fi
 PS2=' $(echo -en "\[${RETURN_COLOR}\]${PROMPT_SECONDARY}\[${RS}\]") '
-
-# -----------------------------------------------------------------------------
-# colored error output
-# -----------------------------------------------------------------------------
-
-#export LD_PRELOAD="$HOME/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
-
-[ -n "$STDERR_COLOR" -a  "$HOSTNAME" != "silver" ] && export COLORPROMPT=1 || export COLORPROMPT=0;
-
-function colorenable(){ [ -n "$STDERR_COLOR" ] && export COLORPROMPT=1 || echo "STDERR_COLOR not set" 1>&2;  }
-function colordisable(){ export COLORPROMPT=0; }
-
-export STDERR_COLOR_EXCEPTIONS=":python:python3:svn:rm:mv:cp:sudo:su:bash:wget:scp:vim:tmux:rudin:gnuplot:" # ':' separated list
-
-# 'undirect' function is located as LAST function in PROMPT_COMMAND
-function undirect(){
-    [ -n "$STDERR_COLOR" ] && trap -- INT && exec 2>&9 ;
-}
-
-function redirect(){
-    if [ $COLORPROMPT ]; then
-        local IFS=":"; local cmd;
-        local PRG="${BASH_COMMAND%% *}"
-        PRG=$(basename "$PRG")
-        [[ "$STDERR_COLOR_EXCEPTIONS" =~ ":$PRG:" ]] && return 1
-
-        function _interupted() { exec 2>&9; }
-        trap ctrl_c INT
-
-        [[ ":make:gcc:g++:" =~ ":$PRG:" ]] && exec 2>&7 || exec 2>&8
-    else
-        exec 2>&9;
-    fi
-}
-
-exec 9>&2           # store initial output of pipe 2
-exec 8> >(
-    while IFS='' read -r line || [ -n "$line" ]; do
-        echo -e "${STDERR_COLOR}${line}${RS}"
-    done
-)
-exec 7> >(
-    sed $'s,.*,\e[31m&\e[m,'
-    set -e -o pipefail;
-    while IFS='' read -r line || [ -n "$line" ]; do
-        if [[ $line == *:[\ ]error:* ]] || [[ $line == *:[\ ]undefined* ]] || [[ $line == *:[\ ]fatal\ error:* ]] || [[ $line == *:[\ ]multiple[\ ]definition* ]]; then
-            echo -e "\033[1m${STDERR_COLOR}${line}${RS}"
-        elif [[ $line == *:[\ ]warning:* ]]; then
-            echo -e "$(EXT_COLOR 202)${line}${RS}"
-        else
-            echo -e "\033[1m$(EXT_COLOR 8)${line}${RS}"
-        fi
-    done
-)
-
-if [[ $HOSTNAME != silver ]]; then
-   trap "redirect;" DEBUG
-fi
 

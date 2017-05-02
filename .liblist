@@ -1,0 +1,29 @@
+m4
+gmp
+mpfr
+mpc
+gcc ./configure --prefix=$HOME/gcc --with-gmp=$HOME/gcc --with-mpfr=$HOME/gcc --with-mpc=$HOME/gcc --enable-languages=c,c++ # [ --target=i386-linux-gnu --disable-sjlj-exceptions  (requires binutils compiled with --target=i386-linux-gnu ]
+readline
+bash
+binutils
+coreutils (change 1.13 to 1.14 for aclocal in configure)
+autoconf
+automake
+gperf
+texinfo
+xz
+tar
+vim ./configure --with-features=huge --enable-gui=gtk2
+openssl (for python)
+ncurses ./configure --prefix=$HOME/usr --with-shared --without-gpm --enable-widec (for python)
+expat (for python)
+python3
+libevent
+tmux # change -std99 to -std89 when it does not compile
+gdb export LDFLAGS="-Wl,-rpath,$HOME/usr/lib -L$HOME/usr/lib"; ./configure --with-python=$HOME/usr
+cgdb
+valgrind
+htop
+xclip
+gnu parallel
+git

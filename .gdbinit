@@ -1,34 +1,113 @@
-set environment INPUTRC = '$HOME/.gdbinitrc'
+define save-config_python
+python
+# get filename and clear the file
+filename = str(gdb.parse_and_eval("$argument"))
+filename = filename.replace("\"","")
+open(filename, 'w').close()
 
-alias ds = display
-set width 0
-set confirm off
+# store breakpoints
+command = "save breakpoints " + filename
+gdb.execute(command,to_string=True)
 
-define skip
-    tbreak +1
-    jump +1
+# store command arguments
+arguments = gdb.execute("show args",to_string=True).split("\"")[1]
+with open(filename, "a") as configfile:
+    command = "set args " + arguments
+    configfile.write(command)
+
+print " ".join(["Written config to:",filename])
+end
 end
 
-define dumbwalk
-    set $frame = $arg0
-    while $frame != 0
-        set $fframe = *(void **) $frame
-        set $fpc = *(void **) ($frame + 4)
-        printf "sp=%x pc=%x\n", $fframe, $fpc
-        set $frame = $fframe
+define save-config
+    if $argc != 1
+        echo Usage: save-config <filename>\n
+    else
+        set $argument = "$arg0"
+        save-config_python
     end
 end
 
-# note: can't recover from this and it doesn't actually work because derp
-define dumbcall
-    set $func = $arg0
-    set $dummy = $arg1
 
-    set $pc = $func
-    set $lr = $dummy
-    break $lr
-    cont
-    print/x $r0
+define skipdir_python
+python
+# get all sources loadable by gdb
+def GetSources():
+    sources = []
+    for line in gdb.execute('info sources',to_string=True).splitlines():
+        if line.startswith("/"):
+            sources += [source.strip() for source in line.split(",")]
+    return sources
+
+# get a list of all sources already skipped
+def GetSkipSources():
+    sources = set();
+    for line in gdb.execute('info skip',to_string=True).splitlines():
+        sources.add(line.split()[3]);
+    return sources
+
+# skip source files of which the (absolute) path starts with 'dir'
+def SkipDir(dir):
+    sources = GetSources()
+    skipsources = GetSkipSources()
+    for source in sources:
+        if source.startswith(dir):
+            if source not in skipsources:
+                gdb.execute('skip file %s' % source, to_string=True)
+
+# time function
+def Timed(timed, function, *args, **kwargs):
+    if timed:
+        import timeit
+        t = timeit.Timer(lambda: function(*args, **kwargs))
+        try:
+            print t.timeit(1)," Seconds"
+        except:
+            t.print_exc()
+    else:
+        function(*args, **kwargs)
+
+# apply only for c++
+if 'c++' in gdb.execute('show language', to_string=True):
+    dir = str(gdb.parse_and_eval("$skipdirargument"))
+    dir = dir.replace("\"","");
+    show_runtime = False
+    Timed(show_runtime,SkipDir,dir)
+end
+end
+
+# skip all files in provided directory
+define skipdir
+    if $argc != 1
+        echo Usage: skipdir </absolute/path>\n
+    else
+        set $skipdirargument = "$arg0"
+        skipdir_python
+    end
+end
+
+document skipdir
+    Prevent stepping into sources files in argument directory
+end
+
+# skip all STL source files and other libraries in '/usr'
+define skipstl
+    skipdir /usr/include
+end
+
+document skipstl
+    Prevent stepping into STL source files
+end
+
+# hooks that run skipstl
+define hookpost-run
+    skipstl
+end
+define hookpost-start
+    skipstl
+end
+define hookpost-attach
+    skipstl
 end
 
 define lsof
@@ -47,8 +126,6 @@ end
 handle SIG32 nostop
 
 # stl printer
-add-auto-load-safe-path /home/gdal/gcc/lib64/libstdc++.so.6.0.21-gdb.py
-
 python
 import sys
 import os
@@ -57,6 +134,15 @@ from libstdcxx.v6.printers import register_libstdcxx_printers
 register_libstdcxx_printers (None)
 end
 
+alias sb = save breakpoint
+alias ds = display
+alias load-config = source
+alias lc = load-config
+alias sc = save-config
+alias lb = load-config
+
+set width 0
+set confirm off
 set print pretty on
 set print object on
 set print static-members on
@@ -65,6 +151,8 @@ set print demangle on
 set demangle-style auto
 set print sevenbit-strings off
 
+set auto-solib-add off
 
 define vgdb
     target remote | vgdb
+

@@ -35,7 +35,7 @@ bind "set completion-query-items     0"
 if [ -t 0 ]; then   # only run if stdin is a terminal
     stty kill undef # unset ctrl-u to make it backspace with ~/.inputrc
 #    stty kill ^Q
-    stty -ixoff  # turn off flow control (Ctrl-s: stop & Ctrl-Q: continue)
+    stty -ixon  # turn off flow control (Ctrl-s: stop & Ctrl-Q: continue)
 fi
 
 shopt -s cmdhist                        # make multiline commands stay together

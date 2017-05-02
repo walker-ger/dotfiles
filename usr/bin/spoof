@@ -1,5 +1,11 @@
 #!/bin/bash
 
+INTERFACE="eth0"
+if [ $# -eq 1 ]; then
+    INTERFACE=$1
+    echo INTERFACE: $INTERFACE
+fi
+
 DIR=$( cd "$( dirname "$0" )" && pwd )
 SCRIPT=$DIR/${0##*/}
 SPOOFDHCPFILE=$DIR/spoofdhcp.conf
@@ -24,7 +30,7 @@ function gendhcpconfig(){
     echo -e "\
 send host-name '$1';
 
-interface \"eth0\"
+interface \"$INTERFACE\"
 {
     supersede host-name '$1';
     prepend domain-name-servers 127.0.0.1;
@@ -55,15 +61,15 @@ spoof(){
     echo
     echo "------------------------------"
     echo "dhcp shutting down.."
-    dhclient -r eth0
-    echo "eth0 shutting down.."
-    ifconfig eth0 down
-    echo "eth0 changing MAC.."
-    ifconfig eth0 hw ether $NEWMAC
-    echo "eth0 booting up.."
-    ifconfig eth0 up
+    dhclient -r $INTERFACE
+    echo "$INTERFACE shutting down.."
+    ifconfig $INTERFACE down
+    echo "$INTERFACE changing MAC.."
+    ifconfig $INTERFACE hw ether $NEWMAC
+    echo "$INTERFACE booting up.."
+    ifconfig $INTERFACE up
     echo "dhcp booting up.."
-    dhclient -cf "$SPOOFDHCPFILE" eth0
+    dhclient -cf "$SPOOFDHCPFILE" $INTERFACE
     echo "------------------------------"
 
     NEWIP=$(getip)
@@ -82,8 +88,8 @@ spoof(){
 }
 
 if [ "$UID" -ne 0 ]; then
-    sudo $SCRIPT
+    sudo $SCRIPT $INTERFACE
 else
-    spoof
+    spoof $INTERFACE
 fi
 

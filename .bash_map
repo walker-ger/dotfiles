@@ -19,11 +19,11 @@ if  [ -z "$SSH_TTY" ]           && \
 
     # map keys
     case $(hostname) in
-        dalVM)  XKBOPTION="altwin:ctrl_win";;    # right alt is control (freestyle2 keyboard)
+        silveru)  XKBOPTION="altwin:ctrl_win";;    # right alt is control (freestyle2 keyboard)
         *)      XKBOPTION="ctrl:swapcaps";;      # swap ctrl and caps
     esac
 
-    if [[ "$(echo "$MAP" | grep "options" | awk '{print $2}')" != *"$XKBOPTION"* ]]; then
+    if [[ "$(echo "$MAP" | grep "options" | awk '{print $2}')" =~ (altwin:ctrl_win|ctrl:swapcaps) ]]; then
         setxkbmap -option $XKBOPTION
     fi
 

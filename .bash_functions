@@ -4,6 +4,16 @@
 # bash functions
 # -----------------------------------------------------------------------------
 
+# detach function from terminal
+function detach(){
+    COMMAND=$1
+    if [[ -n "$(command -v "$COMMAND")" ]]; then
+        (nohup $@ </dev/null >/dev/null 2>&1 &)
+    else
+        echo "Command '$COMMAND' does not exist" 1>&2
+    fi
+}
+
 # limit exec time
 function time-limit(){
     if [ $# -ge 2 ]; then
@@ -184,7 +194,7 @@ function now(){
 function cd(){
     local DIR=$@
     [ $# -eq 0 ] && DIR="$HOME"
-    pushd "$DIR" 1>/dev/null && ls;
+    pushd "$DIR" 1>/dev/null 2>/dev/null && ls || echo "Directory '$DIR' does not exist" 1>&2 ;
 }
 # to pop: alias ..='popd &>/dev/null'
 

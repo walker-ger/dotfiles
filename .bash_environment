@@ -31,8 +31,9 @@ function add-postfix-path() {
 }
 
 function add-include-path() {
-    VARS=(C_INCLUDE_PATH CPLUS_INCLUDE_PATH INCLUDE)
+    local VARS=(C_INCLUDE_PATH CPLUS_INCLUDE_PATH INCLUDE)
     if [ $# -ge 1 ]; then
+        local VAR
         for VAR in ${VARS[@]}; do
             add-prefix-path $VAR ${@}
         done
@@ -42,8 +43,9 @@ function add-include-path() {
 }
 
 function add-library-path() {
-    VARS=(LD_LIBRARY_PATH LD_RUN_PATH LIBRARY_PATH)
+    local VARS=(LD_LIBRARY_PATH LD_RUN_PATH LIBRARY_PATH)
     if [ $# -ge 1 ]; then
+        local VAR
         for VAR in ${VARS[@]}; do
             add-prefix-path $VAR ${@}
         done

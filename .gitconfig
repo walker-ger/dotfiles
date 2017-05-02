@@ -7,7 +7,7 @@
 	default = matching
 [merge]
 	defaultToUpstream = true
-	tool = vimdiff
+	tool = vim -d -c 'norm ]c[c'
 	conflictstyle = diff3
 [color]
     diff = always
@@ -20,7 +20,7 @@
 [difftool "diffpdf"]
 	cmd = diffpdf \"$LOCAL\" \"$REMOTE\"
 [difftool "vimdiff"]
-	cmd = vimdiff \"$LOCAL\" \"$REMOTE\"
+	cmd = vim -d -c 'norm ]c[c' \"$LOCAL\" \"$REMOTE\"
 [alias]
 	pdfdiff = difftool --tool=diffpdf
 	vimdiff = difftool --tool=vimdiff
@@ -137,6 +137,14 @@
         git branch -m master;                                                   \
         git push -f origin master;"'
 
+    print-tags = !bash -c '"                                                    \
+        for f in $(git tag -l); do                                              \
+            git print-tag $f | fold -s -w 80;                                   \
+            echo -en \"========================================\";              \
+            echo -en \"========================================\n\n\";          \
+        done;"'
+
+    print-tag = !sh -c 'git rev-parse $1 | xargs git cat-file -p' -
     root = rev-parse --show-toplevel
     branchname = rev-parse --abbrev-ref HEAD
     check = fetch --dry-run -v

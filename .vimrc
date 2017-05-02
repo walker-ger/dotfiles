@@ -6,6 +6,7 @@ autocmd!
 " -----------------------------------------------------------------------------
 
 set shortmess=at                    " no startup message
+set modeline                        " read vim settings in the comments of files
 set nocompatible                    " don't make compatible with vi
 set term=xterm-256color             " 256 color vim :)
 set backspace=eol,start,indent      " backspace behaviour
@@ -51,8 +52,12 @@ set noequalalways                   " dont resize splits when creating a new one
 set shortmess+=I                    " no startup message on empty file
 set nostartofline                   " dont jump to first non-blank chararcter on line
 set magic                           " use regular expressions
-set nofoldenable                    " disable folding
-set foldlevelstart=99               " disable folding (if previous command does not work)
+
+set nofoldenable                      " disable folding
+set foldlevelstart=99                 " disable folding
+set diffopt+=context:99999            " disable folding
+let g:vim_markdown_folding_disabled=1 " disable folding
+
 syntax on                           " syntax highlighting
 
 " generate ctags from anywhere in source tree
@@ -163,10 +168,8 @@ if filereadable(expand("~/.vim/bundle/Vundle.vim/autoload/vundle.vim"))
     Plugin 'kien/rainbow_parentheses.vim'
     Plugin 'scrooloose/syntastic'
     Plugin 'chrisbra/Recover.vim'
-    Plugin 'lervag/vimtex'
     Plugin 'altercation/vim-colors-solarized'
     Plugin 'jezcope/vim-breakindent'
-
 
     " Git plugin not hosted on GitHub
     "Plugin 'git://<url>/<repository>'
@@ -294,6 +297,9 @@ autocmd BufWritePre * :%s/\s\+$//e
 " make pretty columns in visual mode
 vnoremap t !column -t<CR>
 
+" remove newline and add space
+vnoremap n :-1s/\n/\ /g<CR>
+
 " reload configuration
 nnoremap <C-w>r :source ~/.vimrc<CR>
 " print current file
@@ -315,6 +321,10 @@ nnoremap <silent> <C-w>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <C-w>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
 nnoremap <silent> <C-w>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
+nnoremap <silent> <C-w>H <C-w>H<C-w>=
+nnoremap <silent> <C-w>J <C-w>J<C-w>=
+nnoremap <silent> <C-w>K <C-w>K<C-w>=
+nnoremap <silent> <C-w>L <C-w>L<C-w>=
 " -----------------------------------------------------------------------------
 " Navigational changes and aliases
 " -----------------------------------------------------------------------------

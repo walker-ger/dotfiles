@@ -30,6 +30,7 @@ hi Special	    ctermfg=172         ctermbg=None        cterm=Bold
 hi Ignore       ctermfg=221         ctermbg=None        cterm=Bold
 hi Underline    ctermfg=147         ctermbg=None        cterm=Italic
 hi ColorColumn                      ctermbg=235
+hi SignColumn   ctermfg=253         ctermbg=None        cterm=None
 hi MatchParen   ctermfg=202         ctermbg=226         cterm=bold
 
 hi FoldColumn	ctermfg=132         ctermbg=None        cterm=None
