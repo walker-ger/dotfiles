@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source environment
+
+mkdir -p ${BACKUPDIR}
+
+for DIR in $DIRS; do
+    for FILE in $(find $DIR -xtype f); do
+        TARGETFILE="${TARGET}/${FILE#*/}"
+        if [[ -L "$TARGETFILE" && -d "$TARGETFILE" ]] || [[ -d "$TARGETFILE" ]]; then
+            echo "Target '$TARGETFILE' is a directory"
+            exit 1
+        fi
+
+        if [ -f "${TARGETFILE}" ]; then
+            echo "BACKUP ${TARGETFILE}"
+            if [[ -L "${TARGETFILE}" ]]; then
+                echo "${TARGETFILE} is a link"
+            fi
+            rsync --links --relative "${TARGETFILE}" "${BACKUPDIR}"
+            rm "${TARGETFILE}"
+        fi
+    done
+done
+

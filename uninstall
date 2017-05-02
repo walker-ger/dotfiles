@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source environment
+
+${STOW} -t $TARGET -D $DIRS
+
