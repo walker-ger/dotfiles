@@ -166,3 +166,5 @@
 [pager]
 	show = vim -R -
 	color = false
+[status]
+	submoduleSummary = true
