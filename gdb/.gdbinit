@@ -141,6 +141,7 @@ alias lc = load-config
 alias sc = save-config
 alias lb = load-config
 
+set history save on
 set width 0
 set confirm off
 set print pretty on
