@@ -37,7 +37,6 @@ function debug-conf-make(){
         && make && make install
 }
 
->>>>>>> 7cc5a57802ffa60abd81614a450864bc4426923e
 # limit exec time
 function time-limit(){
     if [ $# -ge 2 ]; then
