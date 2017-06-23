@@ -18,6 +18,26 @@ if [ $(command -v complete) ]; then
     complete -c -o filenames detach
 fi
 
+# compile automake projects with debug symbols
+function debug-conf-make(){
+    if [ ! -f configure ]; then
+        echo "No configure file found." 1>&2
+        return 1
+    fi
+
+    INSTALLDIR="debug"
+    if [ -d $INSTALLDIR ]; then
+        echo "Directory '$INSTALLDIR' already exist. Aborting." 1>&2
+        return 1
+    fi
+
+    mkdir $INSTALLDIR
+    cd $INSTALLDIR
+    ../configure --prefix=$(pwd) CFLAGS="-DDEBUG -g -O0" CPPFLAGS=-DDEBUG CXXFLAGS="-g -O0" \
+        && make && make install
+}
+
+>>>>>>> 7cc5a57802ffa60abd81614a450864bc4426923e
 # limit exec time
 function time-limit(){
     if [ $# -ge 2 ]; then
