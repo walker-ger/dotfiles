@@ -15,12 +15,12 @@ xz
 tar
 vim ./configure --with-features=huge --enable-gui=gtk2
 openssl (for python)
-ncurses ./configure --prefix=$HOME/usr --with-shared --without-gpm --enable-widec (for python)
+ncurses export CPPFLAGS="-P" && ./configure --prefix=$HOME/usr --with-shared --without-gpm --enable-widec (for python)
 expat (for python)
-python3
+python3 --enable-shared
 libevent
-tmux # change -std99 to -std89 when it does not compile
-gdb export LDFLAGS="-Wl,-rpath,$HOME/usr/lib -L$HOME/usr/lib"; ./configure --with-python=$HOME/usr
+tmux export CFLAGS="-I$HOME/usr/include/ncurses[w]" && CPPFLAGS="-I$HOME/usr/include/ncurses[w]" # change -std99 to -std89 when it does not compile
+gdb export LDFLAGS="-Wl,-rpath,$HOME/usr/lib -L$HOME/usr/lib"; ./configure --with-python=$HOME/usr  # require python to be compiled with --enable-shared
 cgdb
 valgrind
 htop

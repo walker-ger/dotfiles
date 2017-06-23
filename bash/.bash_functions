@@ -14,6 +14,10 @@ function detach(){
     fi
 }
 
+if [ $(command -v complete) ]; then
+    complete -c -o filenames detach
+fi
+
 # limit exec time
 function time-limit(){
     if [ $# -ge 2 ]; then
