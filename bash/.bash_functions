@@ -14,9 +14,9 @@ function detach(){
     fi
 }
 
-if [ $(command -v complete) ]; then
-    complete -c -o filenames detach
-fi
+#if [ $(command -v complete) ]; then
+#    complete -c -o filenames detach
+#fi
 
 # compile automake projects with debug symbols
 function debug-conf-make(){
