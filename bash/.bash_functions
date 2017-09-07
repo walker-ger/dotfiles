@@ -280,3 +280,12 @@ function lscolors(){
     }
 }
 
+git-show(){
+    if [ $# -ne 1 ]; then
+        echo "Usage: git-show <branch>:<file>" 1>&2
+        return 1
+    fi
+
+    git show "$1" | vim - -c "set filetype=${1##*.} nobuflisted buftype=nofile bufhidden=wipe noswapfile";
+}
+

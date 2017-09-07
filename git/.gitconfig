@@ -159,8 +159,5 @@
     excludesfile = ~/.gitignoreglobal
 [merge "ours"]
 	driver = true
-[pager]
-    show = vim -c 'set ft=diff' -
-	color = false
 [status]
 	submoduleSummary = true
