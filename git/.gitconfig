@@ -160,7 +160,7 @@
 [merge "ours"]
 	driver = true
 [pager]
-	show = vim -R -
+    show = vim -c 'set ft=diff' -
 	color = false
 [status]
 	submoduleSummary = true
