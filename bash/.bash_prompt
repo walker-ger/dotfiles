@@ -4,30 +4,30 @@
 # ANSI color codes
 # -----------------------------------------------------------------------------
 
-RS="\033[0m"    # reset
-HC="\033[1m"    # hicolor
-UL="\033[4m"    # underline
-INV="\033[7m"   # inverse background and foreground
-FBLK="\033[30m" # foreground black
-FRED="\033[31m" # foreground red
-FGRN="\033[32m" # foreground green
-FYEL="\033[33m" # foreground yellow
-FBLE="\033[34m" # foreground blue
-FMAG="\033[35m" # foreground magenta
-FCYN="\033[36m" # foreground cyan
-FWHT="\033[37m" # foreground white
-BBLK="\033[40m" # background black
-BRED="\033[41m" # background red
-BGRN="\033[42m" # background green
-BYEL="\033[43m" # background yellow
-BBLE="\033[44m" # background blue
-BMAG="\033[45m" # background magenta
-BCYN="\033[46m" # background cyan
-BWHT="\033[47m" # background white
+export RS="\033[0m"    # reset
+export HC="\033[1m"    # hicolor
+export UL="\033[4m"    # underline
+export INV="\033[7m"   # inverse background and foreground
+export FBLK="\033[30m" # foreground black
+export FRED="\033[31m" # foreground red
+export FGRN="\033[32m" # foreground green
+export FYEL="\033[33m" # foreground yellow
+export FBLE="\033[34m" # foreground blue
+export FMAG="\033[35m" # foreground magenta
+export FCYN="\033[36m" # foreground cyan
+export FWHT="\033[37m" # foreground white
+export BBLK="\033[40m" # background black
+export BRED="\033[41m" # background red
+export BGRN="\033[42m" # background green
+export BYEL="\033[43m" # background yellow
+export BBLE="\033[44m" # background blue
+export BMAG="\033[45m" # background magenta
+export BCYN="\033[46m" # background cyan
+export BWHT="\033[47m" # background white
 
 function EXT_COLOR () { echo -ne "\033[38;5;$1m"; }
 
-ORANGE=$(EXT_COLOR 172)
+export ORANGE=$(EXT_COLOR 172)
 
 # -----------------------------------------------------------------------------
 # shell prompt appearance functions
@@ -62,12 +62,37 @@ function last_two_dirs {
 }
 
 case $HOSTNAME in
-    silver          ) PROMPT_COLOR=$FGRN;;
-    fs              ) PROMPT_COLOR=$FMAG;;
-    node[0-9][0-9]  ) PROMPT_COLOR=$FBLE;;
-    lilo*           ) PROMPT_COLOR=$FYEL;;
-    *               ) PROMPT_COLOR=$ORANGE;;
+    silver          ) export PROMPT_COLOR=$FGRN;;
+    fs              ) export PROMPT_COLOR=$FMAG;;
+    node[0-9][0-9]  ) export PROMPT_COLOR=$FBLE;;
+    lilo*           ) export PROMPT_COLOR=$FYEL;;
+    *               ) export PROMPT_COLOR=$ORANGE;;
 esac
+
+# -----------------------------------------------------------------------------
+# color stderr red
+# -----------------------------------------------------------------------------
+
+export COLOR_RED="$(tput setaf 1)"
+export COLOR_RESET="$(tput sgr0)"
+
+exec 9>&2
+exec 8> >(
+    perl -e '$|=1; while(sysread STDIN,$a,9999) {print "$ENV{COLOR_RED}$a$ENV{COLOR_RESET}"}'
+)
+function undirect(){ exec 2>&9; } # reset to original 9 (==2)
+function redirect(){ exec 2>&8; } # set to custom 8
+
+function __prompt_command (){
+    RETURN_VALUE=$?;
+    history -a;
+    echo -ne "\033]0;\007";
+    RETURN_COLOR="$([ $RETURN_VALUE -eq 0 ] && echo -en "$PROMPT_COLOR" || echo -en "$COLOR_RED")";
+    undirect;
+}
+
+trap "redirect;" DEBUG
+export PROMPT_COMMAND=__prompt_command
 
 # -----------------------------------------------------------------------------
 # prompt appearance
@@ -76,15 +101,6 @@ esac
 PROMPT_PRIMARY=$(echo -e "\xe2\x97\x8f")
 PROMPT_SECONDARY=$(echo -en "\xe2\x97\x8b")
 OS=$(if [ "$(uname -m)" == "x86_64" ]; then echo "64"; else echo "32"; fi)
-
-function __prompt_command (){
-    RETURN_VALUE=$?;
-    history -a;
-    echo -ne "\033]0;\007";
-    RETURN_COLOR="$([ $RETURN_VALUE -eq 0 ] && echo -en "$PROMPT_COLOR" || echo -en "$FRED")";
-}
-
-export PROMPT_COMMAND=__prompt_command
 
 # keep in mind color codes without surrounding [ and ] will screw up history lookup
 if [ "$OS" == "32" ]; then
