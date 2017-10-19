@@ -140,9 +140,10 @@
             echo -en \"========================================\n\n\";          \
         done;"'
 
+    branchname = rev-parse --abbrev-ref HEAD
+    count = rev-list --count HEAD
     print-tag = !sh -c 'git rev-parse $1 | xargs git cat-file -p' -
     root = rev-parse --show-toplevel
-    branchname = rev-parse --abbrev-ref HEAD
     check = fetch --dry-run -v
     unstage = reset HEAD -- .
     add-push = remote set-url --add --push origin
