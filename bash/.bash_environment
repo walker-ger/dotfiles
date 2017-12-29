@@ -79,8 +79,7 @@ if [ -z "$BASH_CUSTOM_ENVIRONMENT" ]; then
     export CVSROOT="$HOME/trunk/cvs"
     export CVSEDITOR="vim"
     mkdir -p "$CVSROOT/CVSROOT"
-    export PYTHONPATH="$PRG/local/python/lib/python3.4/site-packages/"
-    mkdir -p $PYTHONPATH
+    export PYTHONPATH="$PYTHON:/usr/local/lib/python2.7/dist-packages"
 
     export PKG_CONFIG_PATH="$PRG/lib/pkgconfig"
     export VALGRIND_LIB="$PRG/lib/valgrind"

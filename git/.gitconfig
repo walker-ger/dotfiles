@@ -96,11 +96,7 @@
     repository = !bash -c '"                                                    \
         echo  \"Repository $(git root):$(git branchname)\";"'
 
-    pullall = !bash -c '"                                                       \
-        for branch in $(git branch -a | grep remotes | grep -v HEAD | grep -v master); do\
-            git branch --track ${branch#remotes/origin/} $branch;               \
-        done;                                                                   \
-        git pull --all;'"
+    pull-submodules = submodule foreach git pull
 
     commit-now = !bash -c '"                                                    \
         git commit -a -m \"$(date '+%Y_%m_%d_%H_%M_%S')\";"'
@@ -144,9 +140,10 @@
             echo -en \"========================================\n\n\";          \
         done;"'
 
+    branchname = rev-parse --abbrev-ref HEAD
+    count = rev-list --count HEAD
     print-tag = !sh -c 'git rev-parse $1 | xargs git cat-file -p' -
     root = rev-parse --show-toplevel
-    branchname = rev-parse --abbrev-ref HEAD
     check = fetch --dry-run -v
     unstage = reset HEAD -- .
     add-push = remote set-url --add --push origin
@@ -163,8 +160,5 @@
     excludesfile = ~/.gitignoreglobal
 [merge "ours"]
 	driver = true
-[pager]
-	show = vim -R -
-	color = false
 [status]
 	submoduleSummary = true

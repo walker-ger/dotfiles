@@ -142,6 +142,7 @@ alias sc = save-config
 alias lb = load-config
 
 set history save on
+set history filename ~/.gdb_history
 set width 0
 set confirm off
 set print pretty on
