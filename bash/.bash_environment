@@ -4,67 +4,53 @@
 # User environment update functions
 # -----------------------------------------------------------------------------
 
-function join-string() {
-    local IFS="$1"; shift; echo "$*";
-}
-
 function add-prefix-path() {
     if [ $# -ge 2 ]; then
         local VAR=$1
-        local ADDPATH=$(join-string ':' ${@:2})
-        # export VAR=${ADDPATH}${VAR:+:}${VAR}
-        eval "export ${VAR}=${ADDPATH}\${${VAR}:+:}\${${VAR}}"
+        local MYPATH=${@:2}
+        local MYPATHS=$(eval echo "\$$VAR")
+        [[ ":${MYPATHS}:" != *":$MYPATH:"* ]] && \
+            eval "export ${VAR}=\"${MYPATH}\${${VAR}:+:}\${${VAR}}\""
     else
-        echo "Usage: add-path-prefix <VAR> <PATH> [[PATH] [PATH] ...]" 1>&2
+        echo "Usage: add-path-prefix <VAR> <PATH>" 1>&2
     fi
 }
 
 function add-postfix-path() {
     if [ $# -ge 2 ]; then
         local VAR=$1
-        local ADDPATH=$(join-string ':' ${@:2})
-        # export VAR=${VAR}${VAR:+:}${ADDPATH}
-        eval "export ${VAR}=\${${VAR}}\${${VAR}:+:}${ADDPATH}"
+        local MYPATH=${@:2}
+        local MYPATHS=$(eval echo "\$$VAR")
+        [[ ":${MYPATHS}:" != *":$MYPATH:"* ]] && \
+            eval "export ${VAR}=\"\${${VAR}}\${${VAR}:+:}${MYPATH}\""
     else
-        echo "Usage: add-path-postfix <VAR> <PATH> [[PATH] [PATH] ...]" 1>&2
+        echo "Usage: add-path-postfix <VAR> <PATH>" 1>&2
     fi
 }
 
-function add-include-path() {
-    local VARS=(C_INCLUDE_PATH CPLUS_INCLUDE_PATH INCLUDE)
-    if [ $# -ge 1 ]; then
-        local VAR
-        for VAR in ${VARS[@]}; do
-            add-prefix-path $VAR ${@}
+function add-path() {
+    local USAGE="echo 'Usage: add-path <library|include|bin> <PATH> [[PATH] [PATH] ...]' 1>&2"
+    if ! [ $# -ge 1 ]; then
+        eval "$USAGE"
+        return 1;
+    fi
+
+    local VARS
+    case $1 in
+        library) VARS=(LD_LIBRARY_PATH LD_RUN_PATH LIBRARY_PATH);;
+        include) VARS=(C_INCLUDE_PATH CPLUS_INCLUDE_PATH INCLUDE);;
+        bin)     VARS=(PATH);;
+        *)       eval $USAGE; return 1;;
+    esac
+
+    local VAR
+    local MYPATH
+    for VAR in "$VARS"; do
+        for MYPATH in "$@"; do
+            add-prefix-path $VAR $MYPATH
         done
-    else
-        echo "Usage: add-include-path <PATH> [[PATH] [PATH] ...]" 1>&2
-    fi
+    done
 }
-
-function add-library-path() {
-    local VARS=(LD_LIBRARY_PATH LD_RUN_PATH LIBRARY_PATH)
-    if [ $# -ge 1 ]; then
-        local VAR
-        for VAR in ${VARS[@]}; do
-            add-prefix-path $VAR ${@}
-        done
-    else
-        echo "Usage: add-library-path <PATH> [[PATH] [PATH] ...]" 1>&2
-    fi
-}
-
-function add-bin-path() {
-    VARS=(PATH)
-    if [ $# -ge 1 ]; then
-        for VAR in ${VARS[@]}; do
-            add-prefix-path $VAR ${@}
-        done
-    else
-        echo "Usage: add-bin-path <PATH> [[PATH] [PATH] ...]" 1>&2
-    fi
-}
-
 
 if [ -z "$BASH_CUSTOM_ENVIRONMENT" ]; then
 
@@ -77,9 +63,9 @@ if [ -z "$BASH_CUSTOM_ENVIRONMENT" ]; then
     PRG="$HOME/usr"
     PYTHON="$PRG/local/python"
 
-    add-include-path $GCCL/include $PRG/include $PRG/include/ncurses $CUDA/include /usr/include
-    add-library-path $GCCL/lib $GCCL/lib64 $PRG/lib $PRG/lib64 $CUDA/lib $CUDA/lib64 /lib64 /usr/lib
-    add-bin-path     $GCCL/bin $PRG/bin:$CUDA/bin $PRG/bin/texbin $HOME/texlive/bin/i386-linux $PYTHON/bin
+    add-path include $GCCL/include $PRG/include $PRG/include/ncurses $CUDA/include /usr/include
+    add-path library $GCCL/lib $GCCL/lib64 $PRG/lib $PRG/lib64 $CUDA/lib $CUDA/lib64 /lib64 /usr/lib
+    add-path bin     $GCCL/bin $PRG/bin:$CUDA/bin $PRG/bin/texbin $HOME/texlive/bin/i386-linux $PYTHON/bin
 
 
     # -----------------------------------------------------------------------------
