@@ -45,8 +45,8 @@ function add-path() {
 
     local VAR
     local MYPATH
-    for VAR in "$VARS"; do
-        for MYPATH in "$@"; do
+    for VAR in "${VARS[@]}"; do
+        for MYPATH in "${@:2}"; do
             add-prefix-path $VAR $MYPATH
         done
     done
