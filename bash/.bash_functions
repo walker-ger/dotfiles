@@ -14,6 +14,10 @@ function detach(){
     fi
 }
 
+#if [ $(command -v complete) ]; then
+#    complete -c -o filenames detach
+#fi
+
 # compile automake projects with debug symbols
 function debug-conf-make(){
     if [ ! -f configure ]; then
@@ -274,5 +278,14 @@ function lscolors(){
             echo -e "\e[${i#*=}m$( x=${i%=*}; [ "${!x}" ] && echo "${!x}" || echo "$x" )\e[m"
         done
     }
+}
+
+git-show(){
+    if [ $# -ne 1 ]; then
+        echo "Usage: git-show <branch>:<file>" 1>&2
+        return 1
+    fi
+
+    git show "$1" | vim - -c "set filetype=${1##*.} nobuflisted buftype=nofile bufhidden=wipe noswapfile";
 }
 

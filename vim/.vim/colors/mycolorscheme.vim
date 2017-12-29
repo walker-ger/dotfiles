@@ -1,5 +1,4 @@
 " Vim color file
-" Maintainer:	Piotr Husiatyński <phusiatynski@gmail.com>
 
 set background=dark
 set t_Co=256
@@ -21,7 +20,6 @@ hi Statement	ctermfg=172         ctermbg=None        cterm=Bold
 hi Comment	    ctermfg=240         ctermbg=None        cterm=None
 hi LineNr	    ctermfg=244         ctermbg=233         cterm=None
 hi NonText	    ctermfg=None        ctermbg=None        cterm=None
-hi DiffText	    ctermfg=165         ctermbg=244         cterm=None
 hi Constant	    ctermfg=76          ctermbg=None        cterm=None
 hi Todo         ctermfg=162         ctermbg=None        cterm=Bold
 hi Identifier	ctermfg=253         ctermbg=None        cterm=Bold
@@ -32,6 +30,11 @@ hi Underline    ctermfg=147         ctermbg=None        cterm=Italic
 hi ColorColumn                      ctermbg=235
 hi SignColumn   ctermfg=253         ctermbg=None        cterm=None
 hi MatchParen   ctermfg=202         ctermbg=226         cterm=bold
+
+hi DiffAdd      ctermfg=None        ctermbg=28     cterm=none
+hi DiffChange   ctermfg=None        ctermbg=127     cterm=none
+hi DiffDelete   ctermfg=None        ctermbg=160     cterm=bold
+hi DiffText     ctermfg=None        ctermbg=132    cterm=none
 
 hi FoldColumn	ctermfg=132         ctermbg=None        cterm=None
 hi Folded       ctermfg=132         ctermbg=None        cterm=Bold
